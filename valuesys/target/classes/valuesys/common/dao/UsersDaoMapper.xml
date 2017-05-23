@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	 
+<mapper namespace="valuesys.common.dao.UsersDao">
+
+	<insert id="registration" parameterType="UsersDto">
+		insert into users values(#{usersId}, #{usersPassword}, #{usersName}, #{usersPhone}, #{usersEmail})
+	</insert>
+ 
+ 	<select id="userLogin" parameterType="map" resultType="int">
+ 		select count(*) from users where users_id=#{id} and users_password=#{password}
+ 	</select>
+ 
+ 	<select id="mgrLogin" parameterType="map" resultType="int">
+		select count(*) from mgr where mgr_id=#{id} and mgr_password=#{password}
+ 	</select>
+ 	
+ 	
+ 	
+ 	<select id="getRowCount" parameterType="BoardDto" resultType="int">
+ 		select count(*) from board
+ 	</select>
+ 
+	<select id="boardList" parameterType="map" resultType="BoardDto">
+		<!-- select board_number, board_title, board_writer, board_date, board_read_count, board_content, board_file
+			from(select a.*, rownum rnum from (select * from board
+    	    	<where>
+    	    		검색분야를 입력했다면
+					<if test="keyWord!=null and keyField=='title'">
+						and board_title like '%' || #{keyWord} || '%'
+					</if>
+					<if test="keyWord!=null and keyField=='writer'">
+						and total_id like '%' || #{keyWord} || '%'
+					</if>
+					<if test="keyWord!=null and keyField=='content'">
+						and board_content like '%' || #{keyWord} || '%'
+					</if>
+					<if test="keyWord!=null and keyField=='all'">
+						and (board_title like '%' || #{keyWord} || '%' or
+							total_id like '%' || #{keyWord} || '%' or
+							board_content like '%' || #{keyWord} || '%')
+					</if>
+    	    	</where>
+			 order by board_number desc) a) 
+	<![CDATA[
+		WHERE (rnum >= #{start} AND rnum <= #{end})
+	]]>
+				order by board_number desc -->
+			select * from board
+	</select>
+	
+	<insert id="boardInsert" parameterType="BoardDto">
+		insert into board values(board_seq.nextval, #{boardWriter}, #{boardTitle}, #{boardContent}, sysdate, 0, #{boardFile, jdbcType=VARCHAR})
+	</insert>
+	
+	<select id="selectBoard" parameterType="int" resultType="BoardDto">
+		select * from board where board_number = #{boardNumber}
+	</select>
+
+
+ 
+</mapper>
