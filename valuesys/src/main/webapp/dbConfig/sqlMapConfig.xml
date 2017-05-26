@@ -13,6 +13,7 @@
 		<!-- <typeAlias alias="usersDto" type="com.wepos.common.dto.UsersDto"/> 사용할 DTO 별칭 부여 -->
 		<typeAlias alias="usersDto" type="valuesys.common.dto.UsersDto"/>
 		<typeAlias alias="boardDto" type="valuesys.common.dto.BoardDto"/>
+		<typeAlias alias="replyDto" type="valuesys.common.dto.ReplyDto"/>
 	</typeAliases>
 		
 	<mappers>	    

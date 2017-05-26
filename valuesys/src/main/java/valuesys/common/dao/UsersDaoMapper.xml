@@ -18,15 +18,35 @@
  	
  	
  	
- 	<select id="getRowCount" parameterType="BoardDto" resultType="int">
+ 	<!-- <select id="getRowCount" parameterType="BoardDto" resultType="int">
  		select count(*) from board
- 	</select>
+ 	</select> -->
+ 	
+ 	<select id="getRowCount" parameterType="map" resultType="int">
+		select count(*) from board 
+		<where>
+			<if test="keyWord!=null and keyField=='board_title'">
+				and board_title like '%' || #{keyWord} || '%'
+			</if>
+			<if test="keyWord!=null and keyField=='board_writer'">
+				and total_id like '%' || #{keyWord} || '%'
+			</if>
+			<if test="keyWord!=null and keyField=='board_content'">
+				and board_content like '%' || #{keyWord} || '%'
+			</if>
+			<if test="keyWord!=null and keyField=='all'">
+				and (board_title like '%' || #{keyWord} || '%' or
+					board_writer like '%' || #{keyWord} || '%' or
+					board_content like '%' || #{keyWord} || '%')
+			</if>
+       	</where>
+	</select>
  
 	<select id="boardList" parameterType="map" resultType="BoardDto">
-		<!-- select board_number, board_title, board_writer, board_date, board_read_count, board_content, board_file
+		select board_number, board_title, board_writer, board_date, board_read_count, board_content, board_file
 			from(select a.*, rownum rnum from (select * from board
     	    	<where>
-    	    		검색분야를 입력했다면
+    	    		<!-- 검색분야를 입력했다면 -->
 					<if test="keyWord!=null and keyField=='title'">
 						and board_title like '%' || #{keyWord} || '%'
 					</if>
@@ -38,7 +58,7 @@
 					</if>
 					<if test="keyWord!=null and keyField=='all'">
 						and (board_title like '%' || #{keyWord} || '%' or
-							total_id like '%' || #{keyWord} || '%' or
+							board_writer like '%' || #{keyWord} || '%' or
 							board_content like '%' || #{keyWord} || '%')
 					</if>
     	    	</where>
@@ -46,17 +66,86 @@
 	<![CDATA[
 		WHERE (rnum >= #{start} AND rnum <= #{end})
 	]]>
-				order by board_number desc -->
-			select * from board
+				order by board_number desc
+			<!-- select * from board order by board_number desc -->
 	</select>
 	
 	<insert id="boardInsert" parameterType="BoardDto">
-		insert into board values(board_seq.nextval, #{boardWriter}, #{boardTitle}, #{boardContent}, sysdate, 0, #{boardFile, jdbcType=VARCHAR})
+		insert into board values(board_seq.nextval, #{boardWriter}, #{boardTitle}, #{boardContent}, sysdate, 0, #{boardFile, jdbcType=VARCHAR}, 0)
 	</insert>
 	
 	<select id="selectBoard" parameterType="int" resultType="BoardDto">
 		select * from board where board_number = #{boardNumber}
 	</select>
+
+	<update id="plusReadCount" parameterType="int">
+		update board set board_read_count = board_read_count +1 where board_number = #{boardNumber}
+	</update>
+	
+	<update id="updateBoardProc" parameterType="boardDto">
+		update board set board_title = #{boardTitle}, board_content = #{boardContent}, board_file = #{boardFile, jdbcType=VARCHAR}
+	  	where board_number = #{boardNumber}
+	</update>
+	
+	<delete id="deleteBoard" parameterType="int">
+		delete from board where board_number = #{boardNumber}
+	</delete>
+	
+	<select id="boardLike" parameterType="int">
+		update board set board_like = board_like+1 where board_number = #{boardNumber}
+	</select>
+	
+	<update id="minusReadCount" parameterType="int">
+		update board set board_read_count = board_read_count -1 where board_number = #{boardNumber}
+	</update>
+
+
+	
+	<insert id="replyWrite" parameterType="ReplyDto">
+		insert into reply values(reply_SEQ.nextval, #{boardNumber}, #{replyWriter}, #{replyContent}, sysdate, 0)
+  	</insert>
+
+	<select id="getReplyCount" parameterType="int" resultType="int">
+		select count(*) from reply where board_number = #{boardNumber}
+	</select>
+
+	<select id="replyList" parameterType="map" resultType="ReplyDto">
+		<!-- select * from reply where board_number = #{boardNumber}	 order by reply_number desc -->
+		select rnumbr.reply_number, rnumbr.board_number, rnumbr.reply_writer, rnumbr.reply_content, rnumbr.reply_date
+  	from
+  	(  	
+  		select br.*, rownum as rnum
+  		from
+  		(
+  			select *
+  			from reply
+  			where board_number = #{boardNumber}
+  			order by reply_number desc
+  		) br
+  	) rnumbr
+  	<![CDATA[
+		where rnum >= #{start} and rnum <= #{end}
+	]]>
+	</select>
+	
+	<delete id="deleteReply" parameterType="int">
+		delete from reply where reply_number = #{replyNumber}	
+	</delete>
+	
+	<update id="updateReply" parameterType="ReplyDto">
+		update reply set reply_content = #{replyContent} where reply_number = #{replyNumber}
+	</update>
+	
+	
+	
+	<select id="boardAlarm" resultType="int">
+		select count(*) from board where board_date > to_char(sysdate, 'yyyy-mm-dd')
+	</select>
+	
+	
+	
+	
+	
 
 
  

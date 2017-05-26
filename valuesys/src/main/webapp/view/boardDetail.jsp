@@ -35,28 +35,31 @@
 <!-- CSS Page Style -->
 <link rel="stylesheet" href="../assets/css/pages/page_search_inner_tables.css">
 
+<script language="JavaScript" src="../js/board.js?v=3"></script>
 
 <script type="text/javascript">
-function shopBoardReplyWrite()
+function boardReplyWriteCheck()
 {
-	if(${sessionScope.id == null})
+	//$("#replyContent").val()==null 이것만 하니까 오류가 나지 빈 문자열인것도 넣어줘야지!! 아 이걸 무진장 헤맸네..
+	if($("#replyContent").val()==null || $("#replyContent").val()=="")
 	{
-		alert("댓글은 로그인 후 사용 가능합니다.");
-	}	
+		alert("댓글 내용을 입력해 주세요!!")
+		$("#replyContent").focus();
+		return false;
+	}
 	else
-	{    		
-		var boardNumber = $("#boardNumber").val();
-		var replyContent = $("#replyContent").val();
+	{
+	var boardNumber = $("#boardNumber").val();
+	var replyContent = $("#replyContent").val();
 		$("#replyContent").val("");
-		$.get("shopBoardReplyWrite.do", {boardNumber : boardNumber, replyContent : replyContent}, function(result)
+		$.post("boardReplyWrite.do", {boardNumber : boardNumber, replyContent : replyContent}, function(result)
 		{			
 			$("#replyDiv").html(result);
 		})    		
-	}    	
+	}
 }
 </script>
-
-<title>We POS</title>
+<title>VALUESYS</title>
 </head>
 <body>
 	<div class="wrapper">
@@ -72,6 +75,11 @@ function shopBoardReplyWrite()
 	                            <li><i class="fa fa-calendar"></i> ${selectBoard.boardDate}</li>
 	                            <li><i class="fa fa-pencil"></i> ${selectBoard.boardWriter}</li>
 	                            <li><i class="fa fa-comments"></i> ${selectBoard.boardReadCount}회 조회</li>
+	                            <li><i class="fa fa-users"></i>
+	                            	<a href="#" onclick="boardLike(${selectBoard.boardNumber})" style="text-decoration: none" id="boardLikes">
+	                            		좋아요(<font style="color: green;font-weight: bolder;">${selectBoard.boardLike}</font>)
+	                            	</a>
+	                            </li>
                         	</ul>
 						</div>						
 						<c:if test="${selectBoard.boardFile != null}">
@@ -79,7 +87,7 @@ function shopBoardReplyWrite()
 								<img class="img-responsive" src="${selectBoard.boardFile}" alt="" style="width: 80%;">
 							</div>
 						</c:if>	
-						<pre style="font-size: 20px; background-color: white; border: 0px;">${shopBoard.boardContent}</pre>
+						<pre style="font-size: 20px; background-color: white; border: 0px;">${selectBoard.boardContent}</pre>
 						<hr>
 						<b>첨부파일 : </b>
 						<c:if test="${selectBoard.boardFile == null}">
@@ -89,21 +97,33 @@ function shopBoardReplyWrite()
 							<a href="file.do?boardFile=${fileName}">${selectBoard.boardFile}</a>
 						</c:if>
 						<div align="right">						
-							<c:if test="${sessionScope.id eq shopBoard.totalId}">
-								<button class="btn-u" type="button" onclick="location.href='shopBoardUpdate.do?boardNumber=${shopBoard.boardNumber}&menuType=${menuType}'">수정</button>																		
-								<button class="btn-u" type="button" onclick="shopBoardDelete(${shopBoard.boardNumber}, ${shopBoard.shopCode}, '${fileName}', '${menuType}')">삭제</button>
+							<c:if test="${sessionScope.id eq selectBoard.boardWriter}">
+								<button class="btn-u" type="button" onclick="location.href='boardUpdate.do?boardNumber=${selectBoard.boardNumber}'">수정</button>
+								<button class="btn-u" type="button" onclick="boardDelete(${selectBoard.boardNumber})">삭제</button>
 							</c:if>
-							<button class="btn-u" type="button" onclick="location.href='../common/shopBoardSelectMenu.do?shopCode=${shopBoard.shopCode}&menuType=${menuType}'">목록으로</button>							
+							<button class="btn-u" type="button" onclick="location.href='../view/board.do'">목록으로</button>							
 						</div>
 					</div>
 					<div class="headline" ><h3>댓글</h3></div>					
-					<input type="hidden" id="boardNumber" name="boardNumber" value="${shopBoard.boardNumber}">
-					<div class="input-group">
-						<textarea class="form-control" rows="3" id="replyContent" name="replyContent" placeholder="댓글은 로그인 후 이용 가능합니다." style="resize: none;"></textarea>
-						<span class="input-group-btn">
-							<button class="btn-u" type="button" style="height: 74px;" onclick="shopBoardReplyWrite()">등록</button>			
-						</span>
-					</div>	
+					<input type="hidden" id="boardNumber" name="boardNumber" value="${selectBoard.boardNumber}">
+					
+					<c:if test="${sessionScope.id==null}">
+						<div class="input-group">
+							<textarea class="form-control" rows="3" placeholder="댓글은 로그인 후 이용 가능합니다." style="resize: none;" onClick="location.href='login.do'"></textarea>
+							<span class="input-group-btn">
+								<button class="btn-u" type="button" style="height: 74px;">등록</button>			
+							</span>
+						</div>
+					</c:if>
+					<c:if test="${sessionScope.id!=null}">
+						<div class="input-group">
+							<textarea class="form-control" rows="3" id="replyContent" name="replyContent" placeholder="내용을 작성하세요." style="resize: none;" maxlength="100"></textarea>
+							<span class="input-group-btn">
+								<button class="btn-u" type="button" style="height: 74px;" onclick="boardReplyWriteCheck()">등록</button>			
+							</span>
+						</div>
+					</c:if>
+						
 					<div id="replyDiv">						
 					</div>		
 				</div>

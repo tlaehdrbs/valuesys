@@ -70,7 +70,7 @@
 							<tr>
 								<td style="vertical-align: middle; text-align: center;">첨부 파일</td>
 								<!-- <td><input type="file" class="form-control" name="upload"></td> -->
-								<td><input multiple="multiple" type="file" class="form-control" name="upload"></td>					
+								<td><input multiple="multiple" type="file" class="form-control" name="upload"></td>				
 							</tr>
 							<tr>
 								<td colspan="2" style="vertical-align: middle;" align="right">							

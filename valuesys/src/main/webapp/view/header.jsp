@@ -19,6 +19,29 @@
 			<font id="logo"><a href="../view/main.do" style="text-decoration: none;color: green">VALUESYS</a></font>
 		</center>
 	<div id="menu">
-		공지사항 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="../view/board.do" style="text-decoration: none; color: black">자유게시판</a>
+		<a href="#" onmousemove="change()" style="text-decoration: none;color: black" id="notice">공지사항</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<a href="../view/board.do" style="text-decoration: none; color: black">자유게시판</a>
 	</div>
 	<hr style="clear: both; color: gray;">
+	
+<!-- JS Global Compulsory -->           
+<script type="text/javascript" src="../assets/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../assets/plugins/jquery/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="../assets/plugins/bootstrap/js/bootstrap.min.js"></script> 
+<!-- JS Implementing Plugins -->           
+<script type="text/javascript" src="../assets/plugins/back-to-top.js"></script>
+<script type="text/javascript" src="../assets/plugins/smoothScroll.js"></script>
+<script type="text/javascript" src="../assets/plugins/cube-portfolio/cubeportfolio/js/jquery.cubeportfolio.min.js"></script>
+<!-- JS Page Level -->
+<script type="text/javascript" src="../assets/js/app.js"></script>
+<script type="text/javascript" src="../assets/js/plugins/cube-portfolio/cube-portfolio-2.js"></script>
+
+<script type="text/javascript">
+	function change()
+	{
+		var notice = $("#notice").html();
+		var notice = "기능 구현 안됨"
+		$("#notice").attr("style", "color:red").attr("style", "text-decoration:none")
+		$("#notice").html(notice)
+	}
+</script>

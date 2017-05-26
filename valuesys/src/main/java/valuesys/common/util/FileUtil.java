@@ -2,11 +2,12 @@ package valuesys.common.util;
 
 //업로드를 할 때 업로드 할 원본 파일의 이름을 변경, 수정할 때 삭제하기 위해서 필요로 하는 클래스
 
-import java.io.*; //File Class 필요
+//File Class 필요
+import java.io.File;
 
 public class FileUtil {
 
-	public static final String UPLOAD_PATH="C:/Users/kitcoop/git/WePOS/WePOS/src/main/webapp/downloadFile";
+	public static final String UPLOAD_PATH="C:/Users/user/git/valuesys/valuesys/src/main/webapp/uploadFile";
 	
 	//[1]원본 파일의 이름을 변경할 메서드를 작성
 	// EX) test.txt or test.TXT => . 을 찾아야 함 => lastIndex(.), substring() 이용

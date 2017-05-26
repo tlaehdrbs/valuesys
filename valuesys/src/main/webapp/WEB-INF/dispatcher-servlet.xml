@@ -17,8 +17,8 @@
     
     
     <!-- 경로 매핑설정 --> 
-    <!-- <mvc:annotation-driven />
-    <mvc:resources mapping="/assets/**" location="/assets/" /> -->     
+    <mvc:annotation-driven />
+    <mvc:resources mapping="/assets/**" location="/assets/" />   
     
      
     <!-- ViewResolver : 요청명령어에 따른 prefix(경로), suffix(파일의 확장자) -->

@@ -14,6 +14,7 @@ public class BoardDto {
 	private int boardReadCount; 
 	private String boardFile;
 	private MultipartFile upload;
+	private int boardLike;
 	
 	public int getBoardNumber() {
 		return boardNumber;
@@ -62,6 +63,12 @@ public class BoardDto {
 	}
 	public void setUpload(MultipartFile upload) {
 		this.upload = upload;
+	}
+	public int getBoardLike() {
+		return boardLike;
+	}
+	public void setBoardLike(int boardLike) {
+		this.boardLike = boardLike;
 	}
 	
 	

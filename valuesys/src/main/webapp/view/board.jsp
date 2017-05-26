@@ -39,8 +39,10 @@
 <link rel="stylesheet" href="../css/header.css">
 <link rel="stylesheet" href="../css/footer.css">
 
+<script language="JavaScript" src="../js/board.js?v=1"></script>
+
 </head>
-<body style="background-color: white;">
+<body style="background-color: white;" onload="alarm()" id="alarm">
 	<div id="container">
 		<jsp:include page="header.jsp" flush="false" />
 		<center>
